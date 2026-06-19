@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-midnight: #0d1117;
+  --color-ink: #1a1f2e;
+  --color-cream: #f2ede4;
+  --color-stone: #8b8fa8;
+  --color-amber: #c9922a;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f2ede4;
+  color: #1a1f2e;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}

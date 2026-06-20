@@ -105,6 +105,25 @@ async function sendReminderEmail(letter, env) {
   }
 
   const link = `${env.APP_URL}?letter=${encodeURIComponent(letter.id)}`
+  const text = [
+    'Hello,',
+    '',
+    'A letter you sealed in Algernon is ready to open.',
+    '',
+    'Open your letter:',
+    link,
+    '',
+    'You will need your unlock phrase to read it. Algernon cannot recover the phrase or read your letter.',
+    '',
+    'Oktav Software',
+  ].join('\n')
+  const html = `
+    <p>Hello,</p>
+    <p>A letter you sealed in Algernon is ready to open.</p>
+    <p><a href="${link}">Open your letter</a></p>
+    <p>You will need your unlock phrase to read it. Algernon cannot recover the phrase or read your letter.</p>
+    <p>Oktav Software</p>
+  `
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -115,8 +134,8 @@ async function sendReminderEmail(letter, env) {
       from: env.FROM_EMAIL,
       to: letter.email,
       subject: 'Your Algernon letter is ready',
-      text: `A letter is ready in Algernon. Open it here: ${link}\n\nYou will need your unlock phrase to read it.`,
-      html: `<p>A letter is ready in Algernon.</p><p><a href="${link}">Open your letter</a></p><p>You will need your unlock phrase to read it.</p>`,
+      text,
+      html,
     }),
   })
 

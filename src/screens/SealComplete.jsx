@@ -21,6 +21,7 @@ export default function SealComplete({ letter, setView }) {
         <p className="text-stone">
           It opens on {formatDate(letter.openDate)}. We will email {letter.emailReminder} when it is ready.
         </p>
+        <p className="text-sm text-stone">If you do not see the email that day, check spam or promotions.</p>
       </header>
 
       <section className="space-y-3 rounded-xl border border-black/10 bg-white p-4">

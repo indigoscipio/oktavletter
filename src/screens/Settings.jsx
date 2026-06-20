@@ -35,8 +35,8 @@ export default function Settings({ exportLetters, importLetters, showToast }) {
         <summary className="cursor-pointer text-xl text-ink">Advanced</summary>
         <div className="mt-4 space-y-3">
           <p className="text-sm text-stone">
-            Export or import the local copy stored in this browser. JSON backups contain letter content, so keep them
-            private.
+            Export or import the local browser copy. Older or local-only letters may include letter content, so keep
+            backups private.
           </p>
           <button type="button" onClick={exportLetters} className="rounded-full bg-amber px-4 py-2 text-sm text-ink">
             Export local JSON

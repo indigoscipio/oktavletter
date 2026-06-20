@@ -1,4 +1,4 @@
-import { formatDate, getDaysUntil, getLetterState } from '../utils/dates'
+import { formatDate, formatLongDate, getDaysUntil, getLetterState } from '../utils/dates'
 
 export default function LetterCard({ letter, onOpen }) {
   const state = getLetterState(letter)
@@ -7,7 +7,11 @@ export default function LetterCard({ letter, onOpen }) {
   const description = {
     opened: `Opened ${formatDate(letter.openedAt)}`,
     ready: 'Ready to open',
-    waiting: letter.emailReminder ? `Email reminder set for ${formatDate(letter.openDate)}` : days === 1 ? 'Opens tomorrow' : `Opens in ${days} days`,
+    waiting: letter.emailReminder
+      ? `Email reminder set for ${formatLongDate(letter.openDate)}`
+      : days === 1
+        ? 'Opens tomorrow'
+        : `Opens in ${days} days`,
   }[state]
 
   return (

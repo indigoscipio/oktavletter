@@ -1,4 +1,4 @@
-import { formatDate, getDaysUntil, getLetterState } from '../utils/dates'
+import { formatDate, formatLongDate, getDaysUntil, getLetterState } from '../utils/dates'
 
 export default function LetterDetail({ letter, openLetter, deleteLetter, setView, showToast }) {
   if (!letter) {
@@ -44,7 +44,7 @@ export default function LetterDetail({ letter, openLetter, deleteLetter, setView
         <section className="rounded-xl border border-black/10 bg-white p-6 text-center">
           <p className="text-lg text-ink">This letter is sealed.</p>
           <p className="mt-2 text-stone">
-            It opens on {formatDate(letter.openDate)}{days > 0 ? `, in ${days} days.` : '.'}
+            It opens on {formatLongDate(letter.openDate)}{days > 0 ? `, in ${days} days.` : '.'}
           </p>
         </section>
       ) : null}

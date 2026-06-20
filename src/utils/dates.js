@@ -18,6 +18,16 @@ export function formatDate(value) {
   }).format(date)
 }
 
+export function formatLongDate(value) {
+  const date = parseDate(value)
+  return new Intl.DateTimeFormat(undefined, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date)
+}
+
 export function isFutureDate(value) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)

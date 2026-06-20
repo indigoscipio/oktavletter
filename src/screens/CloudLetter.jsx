@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getCloudLetter } from '../utils/api'
 import { decryptLetterPayload } from '../utils/crypto'
-import { formatDate } from '../utils/dates'
+import { formatDate, formatLongDate } from '../utils/dates'
 
 export default function CloudLetter({ cloudLetterId, setView, showToast }) {
   const [cloudLetter, setCloudLetter] = useState(null)
@@ -61,7 +61,8 @@ export default function CloudLetter({ cloudLetterId, setView, showToast }) {
   if (error && !cloudLetter) {
     return (
       <main className="space-y-4">
-        <p className="text-stone">{error}</p>
+        <h1 className="text-3xl text-ink">Letter not found.</h1>
+        <p className="text-stone">This link may be wrong, or the letter may no longer exist.</p>
         <button type="button" onClick={() => setView('letters')} className="text-amber">
           Back to letters
         </button>
@@ -72,8 +73,8 @@ export default function CloudLetter({ cloudLetterId, setView, showToast }) {
   if (cloudLetter.status === 'waiting') {
     return (
       <main className="space-y-4">
-        <h1 className="text-3xl text-ink">This letter is still sealed.</h1>
-        <p className="text-stone">It opens on {formatDate(cloudLetter.openDate)}.</p>
+        <h1 className="text-3xl text-ink">You are early.</h1>
+        <p className="text-stone">This letter opens on {formatLongDate(cloudLetter.openDate)}.</p>
         <button type="button" onClick={() => setView('letters')} className="text-amber">
           Back to letters
         </button>

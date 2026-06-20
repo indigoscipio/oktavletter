@@ -1,5 +1,5 @@
 import { List } from 'lucide-react'
-import { formatDate } from '../utils/dates'
+import { formatLongDate } from '../utils/dates'
 
 export default function SealComplete({ letter, setView }) {
   if (!letter) {
@@ -19,7 +19,7 @@ export default function SealComplete({ letter, setView }) {
         <p className="text-sm uppercase tracking-[0.2em] text-stone">Sealed</p>
         <h1 className="text-3xl text-ink">Your letter is sealed.</h1>
         <p className="text-stone">
-          It opens on {formatDate(letter.openDate)}. We will email {letter.emailReminder} when it is ready.
+          We will email you on {formatLongDate(letter.openDate)}.
         </p>
         <p className="text-sm text-stone">If you do not see the email that day, check spam or promotions.</p>
       </header>

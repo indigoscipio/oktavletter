@@ -15,12 +15,19 @@ function Section({ title, letters, onOpen, empty }) {
   )
 }
 
-export default function Letters({ letters, setView, setSelectedLetterId }) {
+export default function Letters({ letters, setView, setSelectedLetterId, setCloudLetterId }) {
   const ready = letters.filter((letter) => getLetterState(letter) === 'ready')
   const waiting = letters.filter((letter) => getLetterState(letter) === 'waiting')
   const opened = letters.filter((letter) => getLetterState(letter) === 'opened')
 
   function openDetail(id) {
+    const letter = letters.find((item) => item.id === id)
+    if (letter?.cloudId) {
+      setCloudLetterId(letter.cloudId)
+      setView('cloud')
+      return
+    }
+
     setSelectedLetterId(id)
     setView('detail')
   }

@@ -16,7 +16,13 @@ export function normalizeImportedLetters(value) {
   }
 
   return letters.map((letter) => {
-    if (!letter.id || !letter.title || !letter.content || !letter.openDate || !letter.writtenAt) {
+    if (!letter.id || !letter.title || !letter.openDate || !letter.writtenAt) {
+      throw new Error('Import file contains an invalid letter.')
+    }
+
+    const cloudId = letter.cloudId ? String(letter.cloudId) : null
+    const content = letter.content ? String(letter.content) : ''
+    if (!cloudId && !content) {
       throw new Error('Import file contains an invalid letter.')
     }
 
@@ -29,13 +35,13 @@ export function normalizeImportedLetters(value) {
     return {
       id: String(letter.id),
       title: String(letter.title),
-      content: String(letter.content),
+      content: cloudId ? '' : content,
       writtenAt,
       openDate,
       openedAt,
       createdAt,
       updatedAt,
-      cloudId: letter.cloudId ? String(letter.cloudId) : null,
+      cloudId,
       emailReminder: letter.emailReminder ? String(letter.emailReminder) : null,
     }
   })

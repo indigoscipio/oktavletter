@@ -7,6 +7,7 @@ export default function CloudLetter({ cloudLetterId, setView, showToast }) {
   const [cloudLetter, setCloudLetter] = useState(null)
   const [decryptedLetter, setDecryptedLetter] = useState(null)
   const [passphrase, setPassphrase] = useState('')
+  const [showPassphrase, setShowPassphrase] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [isUnlocking, setIsUnlocking] = useState(false)
@@ -92,12 +93,21 @@ export default function CloudLetter({ cloudLetterId, setView, showToast }) {
         <form onSubmit={unlockLetter} className="space-y-4 rounded-xl border border-black/10 bg-white p-4">
           <label className="block space-y-2">
             <span className="text-sm text-stone">Unlock phrase</span>
-            <input
-              type="password"
-              value={passphrase}
-              onChange={(event) => setPassphrase(event.target.value)}
-              className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
-            />
+            <div className="flex gap-2">
+              <input
+                type={showPassphrase ? 'text' : 'password'}
+                value={passphrase}
+                onChange={(event) => setPassphrase(event.target.value)}
+                className="min-w-0 flex-1 rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassphrase((current) => !current)}
+                className="rounded-xl border border-black/10 px-4 py-3 text-sm text-stone"
+              >
+                {showPassphrase ? 'Hide' : 'Show'}
+              </button>
+            </div>
           </label>
 
           {error ? <p className="text-sm text-amber">{error}</p> : null}

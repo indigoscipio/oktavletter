@@ -99,7 +99,10 @@ async function sendDueReminders(env) {
 }
 
 async function sendReminderEmail(letter, env) {
-  if (!env.RESEND_API_KEY) return false
+  if (!env.RESEND_API_KEY) {
+    console.error('Missing RESEND_API_KEY; reminder not sent.', { letterId: letter.id })
+    return false
+  }
 
   const link = `${env.APP_URL}?letter=${encodeURIComponent(letter.id)}`
   const response = await fetch('https://api.resend.com/emails', {
@@ -117,7 +120,16 @@ async function sendReminderEmail(letter, env) {
     }),
   })
 
-  return response.ok
+  if (!response.ok) {
+    console.error('Resend reminder failed.', {
+      letterId: letter.id,
+      status: response.status,
+      body: await response.text(),
+    })
+    return false
+  }
+
+  return true
 }
 
 function isFutureDate(value) {

@@ -13,7 +13,7 @@ import Write from './screens/Write'
 export default function App() {
   const initialCloudLetterId = new URLSearchParams(window.location.search).get('letter')
   const [view, setView] = useState(initialCloudLetterId ? 'cloud' : 'letters')
-  const [cloudLetterId] = useState(initialCloudLetterId)
+  const [cloudLetterId, setCloudLetterId] = useState(initialCloudLetterId)
   const [selectedLetterId, setSelectedLetterId] = useState(null)
   const letters = useLetters()
   const { toast, showToast } = useToast()
@@ -35,14 +35,7 @@ export default function App() {
     }
 
     if (view === 'sealed') {
-      return (
-        <SealComplete
-          letter={letters.findLetter(selectedLetterId)}
-          exportBackupFor={letters.exportBackupFor}
-          setView={setView}
-          showToast={showToast}
-        />
-      )
+      return <SealComplete letter={letters.findLetter(selectedLetterId)} setView={setView} />
     }
 
     if (view === 'detail') {
@@ -61,7 +54,14 @@ export default function App() {
       return <CloudLetter cloudLetterId={cloudLetterId} setView={setView} showToast={showToast} />
     }
 
-    return <Letters letters={letters.letters} setView={setView} setSelectedLetterId={setSelectedLetterId} />
+    return (
+      <Letters
+        letters={letters.letters}
+        setView={setView}
+        setSelectedLetterId={setSelectedLetterId}
+        setCloudLetterId={setCloudLetterId}
+      />
+    )
   }
 
   return (

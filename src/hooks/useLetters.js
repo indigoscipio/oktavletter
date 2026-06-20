@@ -30,7 +30,7 @@ export function useLetters() {
     const letter = {
       id: crypto.randomUUID(),
       title: title.trim(),
-      content: content.trim(),
+      content: cloudId ? '' : content.trim(),
       writtenAt: now,
       openDate: dateInputToIso(openDate),
       openedAt: null,
@@ -55,33 +55,27 @@ export function useLetters() {
 
   function importLetters(importedLetters) {
     const normalized = normalizeImportedLetters(importedLetters)
-    let added = 0
-    let updated = 0
-    let skipped = 0
+    const merged = new Map(letters.map((letter) => [letter.id, letter]))
+    const result = { added: 0, updated: 0, skipped: 0 }
 
-    setLetters((current) => {
-      const merged = new Map(current.map((letter) => [letter.id, letter]))
+    normalized.forEach((letter) => {
+      const existing = merged.get(letter.id)
+      if (!existing) {
+        merged.set(letter.id, letter)
+        result.added += 1
+        return
+      }
 
-      normalized.forEach((letter) => {
-        const existing = merged.get(letter.id)
-        if (!existing) {
-          merged.set(letter.id, letter)
-          added += 1
-          return
-        }
-
-        if (new Date(letter.updatedAt) > new Date(existing.updatedAt)) {
-          merged.set(letter.id, letter)
-          updated += 1
-        } else {
-          skipped += 1
-        }
-      })
-
-      return [...merged.values()]
+      if (new Date(letter.updatedAt) > new Date(existing.updatedAt)) {
+        merged.set(letter.id, letter)
+        result.updated += 1
+      } else {
+        result.skipped += 1
+      }
     })
 
-    return { added, updated, skipped }
+    setLetters([...merged.values()])
+    return result
   }
 
   function deleteLetter(id) {
@@ -90,10 +84,6 @@ export function useLetters() {
 
   function exportLetters() {
     downloadJson('algernon-backup.json', buildExportPayload(letters))
-  }
-
-  function exportBackupFor(letter) {
-    downloadJson(`algernon-backup-${letter.id}.json`, buildExportPayload([letter, ...letters]))
   }
 
   function findLetter(id) {
@@ -107,7 +97,6 @@ export function useLetters() {
     deleteLetter,
     importLetters,
     exportLetters,
-    exportBackupFor,
     findLetter,
   }
 }

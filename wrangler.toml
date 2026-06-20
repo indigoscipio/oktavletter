@@ -3,7 +3,7 @@ main = "worker/index.js"
 compatibility_date = "2026-06-19"
 
 [triggers]
-crons = ["0 9 * * *"]
+crons = ["0 * * * *"]
 
 [vars]
 APP_URL = "https://algernon.oktavsoftware.com/app/"

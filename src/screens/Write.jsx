@@ -104,6 +104,39 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <label className="block space-y-2">
+          <span className="text-sm text-stone">Title</span>
+          <input
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder="To myself, one year from now"
+            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
+          />
+        </label>
+
+        <label className="block space-y-2">
+          <span className="text-sm text-stone">Open date</span>
+          <input
+            type="date"
+            min={toDateInputValue(new Date(Date.now() + 86400000))}
+            value={openDate}
+            onChange={(event) => setOpenDate(event.target.value)}
+            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
+          />
+          <span className="block text-sm text-stone">Algernon will email you sometime on this date.</span>
+        </label>
+
+        <label className="block space-y-2">
+          <span className="text-sm text-stone">Letter</span>
+          <textarea
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
+            rows={12}
+            placeholder="Write honestly. No one else needs to read this."
+            className="w-full resize-y rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
+          />
+        </label>
+
         <div className="space-y-4 rounded-xl border border-black/10 bg-white p-4">
           <p className="text-sm leading-6 text-stone">
             Algernon will email you when the letter opens. Your letter is encrypted in this browser before upload.
@@ -142,38 +175,6 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
             <strong>Important:</strong> if you forget this phrase, this letter cannot be opened. We cannot recover it.
           </div>
         </div>
-
-        <label className="block space-y-2">
-          <span className="text-sm text-stone">Title</span>
-          <input
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            placeholder="To myself, one year from now"
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
-          />
-        </label>
-
-        <label className="block space-y-2">
-          <span className="text-sm text-stone">Open date</span>
-          <input
-            type="date"
-            min={toDateInputValue(new Date(Date.now() + 86400000))}
-            value={openDate}
-            onChange={(event) => setOpenDate(event.target.value)}
-            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
-          />
-        </label>
-
-        <label className="block space-y-2">
-          <span className="text-sm text-stone">Letter</span>
-          <textarea
-            value={content}
-            onChange={(event) => setContent(event.target.value)}
-            rows={12}
-            placeholder="Write honestly. No one else needs to read this."
-            className="w-full resize-y rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
-          />
-        </label>
 
         {error ? <p className="text-sm text-amber">{error}</p> : null}
 

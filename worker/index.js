@@ -1,4 +1,5 @@
 const JSON_HEADERS = { 'content-type': 'application/json' }
+const DAILY_IP_LIMIT = 5
 
 export default {
   async fetch(request, env) {
@@ -41,17 +42,37 @@ async function createLetter(request, env) {
   if (!isFutureDate(openDate)) return json({ error: 'Choose a future open date.' }, 400)
   if (!encryptedPayload || !salt || !iv) return json({ error: 'Missing encrypted letter data.' }, 400)
 
+  const creatorIp = request.headers.get('cf-connecting-ip') || 'unknown'
+  const limited = await isRateLimited(env, creatorIp)
+  if (limited) {
+    return json({ error: 'Too many letters today. Try again tomorrow.' }, 429)
+  }
+
   const id = crypto.randomUUID()
   const createdAt = new Date().toISOString()
 
   await env.DB.prepare(
-    `INSERT INTO letters (id, email, open_date, encrypted_payload, salt, iv, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO letters (id, email, open_date, encrypted_payload, salt, iv, created_at, creator_ip)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
   )
-    .bind(id, email, openDate, encryptedPayload, salt, iv, createdAt)
+    .bind(id, email, openDate, encryptedPayload, salt, iv, createdAt, creatorIp)
     .run()
 
   return json({ id, openDate })
+}
+
+async function isRateLimited(env, creatorIp) {
+  if (!creatorIp || creatorIp === 'unknown') return false
+
+  const result = await env.DB.prepare(
+    `SELECT COUNT(*) AS count
+     FROM letters
+     WHERE creator_ip = ? AND date(created_at) = date('now')`,
+  )
+    .bind(creatorIp)
+    .first()
+
+  return Number(result?.count || 0) >= DAILY_IP_LIMIT
 }
 
 async function getLetter(id, env) {

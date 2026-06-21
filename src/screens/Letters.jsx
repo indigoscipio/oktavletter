@@ -1,3 +1,4 @@
+import { PenLine } from 'lucide-react'
 import EmptyState from '../components/EmptyState'
 import LetterCard from '../components/LetterCard'
 import { getLetterState } from '../utils/dates'
@@ -54,7 +55,14 @@ export default function Letters({ letters, setView, setSelectedLetterId, setClou
           <Section title="Opened" letters={opened} onOpen={openDetail} empty="No opened letters yet." />
         </div>
       ) : (
-        <EmptyState title="No letters yet">Start by writing one letter to your future self.</EmptyState>
+        <EmptyState
+          title="No letters yet"
+          icon={<PenLine size={32} />}
+          actionLabel="Write your first letter"
+          onAction={() => setView('write')}
+        >
+          Write a letter to your future self. It will arrive on the day you choose.
+        </EmptyState>
       )}
     </main>
   )

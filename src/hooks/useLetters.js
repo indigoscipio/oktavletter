@@ -25,7 +25,7 @@ export function useLetters() {
     return [...letters].sort((a, b) => new Date(a.openDate) - new Date(b.openDate))
   }, [letters])
 
-  function createLetter({ title, content, openDate, cloudId = null, emailReminder = null }) {
+  function createLetter({ title, content, openDate, cloudId = null, emailReminder = null, key = null }) {
     const now = new Date().toISOString()
     const letter = {
       id: crypto.randomUUID(),
@@ -38,6 +38,7 @@ export function useLetters() {
       updatedAt: now,
       cloudId,
       emailReminder,
+      key,
     }
 
     setLetters((current) => [letter, ...current])

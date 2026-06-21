@@ -24,19 +24,14 @@ export default function SealComplete({ letter, setView }) {
         <p className="text-sm text-stone">If you do not see the email that day, check spam or promotions.</p>
       </header>
 
-      <section className="space-y-3 rounded-xl border border-black/10 bg-white p-4">
-        <h2 className="text-xl text-ink">Remember your unlock phrase</h2>
-        <p className="text-sm leading-6 text-stone">It is the only way to open this letter.</p>
-
-        <button
-          type="button"
-          onClick={() => setView('letters')}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-amber px-4 py-3 text-ink"
-        >
-          <List size={18} />
-          Back to letters
-        </button>
-      </section>
+      <button
+        type="button"
+        onClick={() => setView('letters')}
+        className="flex w-full items-center justify-center gap-2 rounded-full bg-amber px-4 py-3 text-ink"
+      >
+        <List size={18} />
+        Back to letters
+      </button>
     </main>
   )
 }

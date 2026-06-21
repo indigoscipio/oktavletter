@@ -9,7 +9,8 @@
     "preview": "vite preview --host 0.0.0.0",
     "worker:deploy": "wrangler deploy",
     "db:migrate:local": "wrangler d1 execute algernon --local --file worker/schema.sql",
-    "db:migrate:remote": "wrangler d1 execute algernon --remote --file worker/schema.sql"
+    "db:migrate:remote": "wrangler d1 execute algernon --remote --file worker/schema.sql",
+    "db:migrate:add-unlock-key": "wrangler d1 execute algernon --remote --file worker/migrations/0003_add_unlock_key.sql"
   },
   "dependencies": {
     "react": "^19.2.6",

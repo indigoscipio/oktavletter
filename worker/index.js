@@ -37,10 +37,12 @@ async function createLetter(request, env) {
   const encryptedPayload = String(body.encryptedPayload || '')
   const salt = String(body.salt || '')
   const iv = String(body.iv || '')
+  const unlockKey = String(body.unlockKey || '')
 
   if (!email.includes('@')) return json({ error: 'Enter a valid email.' }, 400)
   if (!isFutureDate(openDate)) return json({ error: 'Choose a future open date.' }, 400)
   if (!encryptedPayload || !salt || !iv) return json({ error: 'Missing encrypted letter data.' }, 400)
+  if (!unlockKey) return json({ error: 'Missing unlock key.' }, 400)
 
   const creatorIp = request.headers.get('cf-connecting-ip') || 'unknown'
   const limited = await isRateLimited(env, creatorIp)
@@ -52,10 +54,10 @@ async function createLetter(request, env) {
   const createdAt = new Date().toISOString()
 
   await env.DB.prepare(
-    `INSERT INTO letters (id, email, open_date, encrypted_payload, salt, iv, created_at, creator_ip)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO letters (id, email, open_date, encrypted_payload, salt, iv, unlock_key, created_at, creator_ip)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   )
-    .bind(id, email, openDate, encryptedPayload, salt, iv, createdAt, creatorIp)
+    .bind(id, email, openDate, encryptedPayload, salt, iv, unlockKey, createdAt, creatorIp)
     .run()
 
   return json({ id, openDate })
@@ -77,7 +79,7 @@ async function isRateLimited(env, creatorIp) {
 
 async function getLetter(id, env) {
   const letter = await env.DB.prepare(
-    `SELECT id, open_date, encrypted_payload, salt, iv, created_at
+    `SELECT id, open_date, encrypted_payload, salt, iv, unlock_key, created_at
      FROM letters WHERE id = ?`,
   )
     .bind(id)
@@ -96,6 +98,7 @@ async function getLetter(id, env) {
     encryptedPayload: letter.encrypted_payload,
     salt: letter.salt,
     iv: letter.iv,
+    unlockKey: letter.unlock_key,
     createdAt: letter.created_at,
   })
 }
@@ -131,18 +134,14 @@ async function sendReminderEmail(letter, env) {
     '',
     'A letter you sealed in Algernon is ready to open.',
     '',
-    'Open your letter:',
     link,
-    '',
-    'You will need your unlock phrase to read it. Algernon cannot recover the phrase or read your letter.',
     '',
     'Oktav Software',
   ].join('\n')
   const html = `
     <p>Hello,</p>
     <p>A letter you sealed in Algernon is ready to open.</p>
-    <p><a href="${link}">Open your letter</a></p>
-    <p>You will need your unlock phrase to read it. Algernon cannot recover the phrase or read your letter.</p>
+    <p><a href="${link}">Read your letter</a></p>
     <p>Oktav Software</p>
   `
   const response = await fetch('https://api.resend.com/emails', {

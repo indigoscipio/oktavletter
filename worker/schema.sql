@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS letters (
   encrypted_payload TEXT NOT NULL,
   salt TEXT NOT NULL,
   iv TEXT NOT NULL,
+  unlock_key TEXT NOT NULL,
   created_at TEXT NOT NULL,
   creator_ip TEXT,
   reminder_sent_at TEXT

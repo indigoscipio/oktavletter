@@ -43,6 +43,7 @@ export function normalizeImportedLetters(value) {
       updatedAt,
       cloudId,
       emailReminder: letter.emailReminder ? String(letter.emailReminder) : null,
+      key: letter.key ? String(letter.key) : null,
     }
   })
 }

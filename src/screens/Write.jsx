@@ -6,6 +6,11 @@ import { validateLetterInput } from '../utils/validation'
 
 const DRAFT_KEY = 'algernon_draft'
 
+function generateKey() {
+  const bytes = crypto.getRandomValues(new Uint8Array(32))
+  return btoa(String.fromCharCode(...bytes))
+}
+
 function loadDraft() {
   try {
     const stored = localStorage.getItem(DRAFT_KEY)
@@ -21,8 +26,6 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
   const [content, setContent] = useState(draft.content || '')
   const [openDate, setOpenDate] = useState(draft.openDate || '')
   const [email, setEmail] = useState('')
-  const [passphrase, setPassphrase] = useState('')
-  const [showPassphrase, setShowPassphrase] = useState(false)
   const [error, setError] = useState('')
   const [isSealing, setIsSealing] = useState(false)
 
@@ -50,16 +53,12 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
       return
     }
 
-    if (passphrase.trim().length < 8) {
-      setError('Use an unlock phrase with at least 8 characters.')
-      return
-    }
-
     setIsSealing(true)
 
     try {
       const openDateIso = dateInputToIso(openDate)
       const now = new Date().toISOString()
+      const key = generateKey()
       const encrypted = await encryptLetterPayload(
         {
           title: title.trim(),
@@ -68,11 +67,11 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
           openDate: openDateIso,
           createdAt: now,
         },
-        passphrase,
+        key,
       )
-      const cloudLetter = await createCloudLetter({ email: email.trim(), openDate, ...encrypted })
+      const cloudLetter = await createCloudLetter({ email: email.trim(), openDate, ...encrypted, unlockKey: key })
 
-      const letter = createLetter({ title, content, openDate, cloudId: cloudLetter.id, emailReminder: email.trim() })
+      const letter = createLetter({ title, content, openDate, cloudId: cloudLetter.id, emailReminder: email.trim(), key })
       localStorage.removeItem(DRAFT_KEY)
       setSelectedLetterId(letter.id)
       setView('sealed')
@@ -139,7 +138,7 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
 
         <div className="space-y-4 rounded-xl border border-black/10 bg-white p-4">
           <p className="text-sm leading-6 text-stone">
-            Algernon will email you when the letter opens. Your letter is encrypted in this browser before upload.
+            Algernon will email you when the letter opens. Your letter is encrypted before upload.
           </p>
           <label className="block space-y-2">
             <span className="text-sm text-stone">Email</span>
@@ -151,29 +150,6 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
               className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
             />
           </label>
-
-          <label className="block space-y-2">
-            <span className="text-sm text-stone">Unlock phrase</span>
-            <div className="flex gap-2">
-              <input
-                type={showPassphrase ? 'text' : 'password'}
-                value={passphrase}
-                onChange={(event) => setPassphrase(event.target.value)}
-                placeholder="Needed later to read the letter"
-                className="min-w-0 flex-1 rounded-xl border border-black/10 bg-white px-4 py-3 text-ink outline-none focus:border-amber"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassphrase((current) => !current)}
-                className="rounded-xl border border-black/10 px-4 py-3 text-sm text-stone"
-              >
-                {showPassphrase ? 'Hide' : 'Show'}
-              </button>
-            </div>
-          </label>
-          <div className="rounded-xl border border-amber/40 bg-amber/10 p-3 text-sm leading-6 text-ink">
-            <strong>Important:</strong> if you forget this phrase, this letter cannot be opened. We cannot recover it.
-          </div>
         </div>
 
         {error ? <p className="text-sm text-amber">{error}</p> : null}

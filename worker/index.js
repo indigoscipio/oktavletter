@@ -11,7 +11,7 @@ export default {
 
     try {
       if (request.method === 'POST' && url.pathname === '/api/letters') {
-        return withCors(await createLetter(request, env), request, env)
+        return withCors(await createLetter(request, env, ctx), request, env)
       }
 
       const match = url.pathname.match(/^\/api\/letters\/([^/]+)$/)
@@ -30,7 +30,7 @@ export default {
   },
 }
 
-async function createLetter(request, env) {
+async function createLetter(request, env, ctx) {
   const body = await request.json()
   const email = String(body.email || '').trim().toLowerCase()
   const openDate = String(body.openDate || '')

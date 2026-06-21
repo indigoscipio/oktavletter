@@ -31,7 +31,7 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
   const [isSealing, setIsSealing] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
 
-  const hasContent = title.trim() || content.trim()
+  const canPreview = title.trim() && content.trim()
 
   useEffect(() => {
     const hasDraft = title.trim() || content.trim() || openDate
@@ -123,8 +123,8 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
             <div className="my-4 border-t border-black/10" />
 
             <div className="flex items-center justify-between text-sm text-stone">
-              <span>Opens {formatDate(openDate)}</span>
-              <span>→ {email}</span>
+              {openDate ? <span>Opens {formatDate(openDate)}</span> : null}
+              {email ? <span>→ {email}</span> : null}
             </div>
             <div className="mt-5 text-center text-xs text-stone/50">Algernon · private letters</div>
           </div>
@@ -207,7 +207,7 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
           <button type="button" onClick={discardDraft} className="w-full rounded-full border border-black/10 px-4 py-3 text-stone">
             Discard draft
           </button>
-          {hasContent ? (
+          {canPreview ? (
             <button
               type="button"
               onClick={() => setShowPreview(true)}

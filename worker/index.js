@@ -60,6 +60,8 @@ async function createLetter(request, env) {
     .bind(id, email, openDate, encryptedPayload, salt, iv, unlockKey, createdAt, creatorIp)
     .run()
 
+  sendConfirmationEmail({ id, email, openDate }, env)
+
   return json({ id, openDate })
 }
 
@@ -120,6 +122,47 @@ async function sendDueReminders(env) {
         .run()
     }
   }
+}
+
+function formatDateDisplay(dateStr) {
+  const date = new Date(dateStr + 'T00:00:00')
+  return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+}
+
+async function sendConfirmationEmail(letter, env) {
+  if (!env.RESEND_API_KEY) return
+
+  const dateDisplay = formatDateDisplay(letter.openDate)
+  const text = [
+    'Hello,',
+    '',
+    'Your letter is sealed and will open on ' + dateDisplay + '.',
+    '',
+    'We will email you again on that day with a link to read it.',
+    '',
+    'Oktav Software',
+  ].join('\n')
+  const html = `
+    <p>Hello,</p>
+    <p>Your letter is sealed and will open on <strong>${dateDisplay}</strong>.</p>
+    <p>We will email you again on that day with a link to read it.</p>
+    <p>Oktav Software</p>
+  `
+
+  await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      authorization: `Bearer ${env.RESEND_API_KEY}`,
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: env.FROM_EMAIL,
+      to: letter.email,
+      subject: 'Your letter is sealed',
+      text,
+      html,
+    }),
+  })
 }
 
 async function sendReminderEmail(letter, env) {

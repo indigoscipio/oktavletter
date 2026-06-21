@@ -2,7 +2,7 @@ const JSON_HEADERS = { 'content-type': 'application/json' }
 const DAILY_IP_LIMIT = 5
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders(request, env) })
     }
@@ -60,7 +60,7 @@ async function createLetter(request, env) {
     .bind(id, email, openDate, encryptedPayload, salt, iv, unlockKey, createdAt, creatorIp)
     .run()
 
-  sendConfirmationEmail({ id, email, openDate }, env)
+  ctx.waitUntil(sendConfirmationEmail({ id, email, openDate }, env))
 
   return json({ id, openDate })
 }
@@ -149,7 +149,7 @@ async function sendConfirmationEmail(letter, env) {
     <p>Oktav Software</p>
   `
 
-  await fetch('https://api.resend.com/emails', {
+  const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       authorization: `Bearer ${env.RESEND_API_KEY}`,
@@ -163,6 +163,10 @@ async function sendConfirmationEmail(letter, env) {
       html,
     }),
   })
+
+  if (!response.ok) {
+    console.error('Confirmation email failed.', { letterId: letter.id, status: response.status })
+  }
 }
 
 async function sendReminderEmail(letter, env) {

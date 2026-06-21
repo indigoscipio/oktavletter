@@ -26,8 +26,8 @@ export default function Settings({ exportLetters, importLetters, showToast }) {
       <section className="space-y-2 rounded-xl border border-black/10 bg-white p-4">
         <h2 className="text-xl text-ink">About</h2>
         <p className="text-sm leading-6 text-stone">
-          No accounts. Your letter is encrypted in the browser before upload. We can email the link when it opens, but
-          we cannot read or recover the letter without your unlock phrase.
+          No accounts. Your letter is encrypted before upload. We send the link when it opens, but we never read your
+          content.
         </p>
       </section>
 

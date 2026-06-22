@@ -51,7 +51,16 @@ export default function App() {
     }
 
     if (view === 'cloud') {
-      return <CloudLetter cloudLetterId={cloudLetterId} setView={setView} showToast={showToast} />
+      const localLetter = letters.letters.find((l) => l.cloudId === cloudLetterId)
+      return (
+        <CloudLetter
+          cloudLetterId={cloudLetterId}
+          setView={setView}
+          showToast={showToast}
+          openLetter={letters.openLetter}
+          localLetterId={localLetter?.id || null}
+        />
+      )
     }
 
     return (

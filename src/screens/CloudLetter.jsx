@@ -3,7 +3,7 @@ import { getCloudLetter } from '../utils/api'
 import { decryptLetterPayload } from '../utils/crypto'
 import { formatDate, formatLongDate } from '../utils/dates'
 
-export default function CloudLetter({ cloudLetterId, setView, showToast }) {
+export default function CloudLetter({ cloudLetterId, setView, showToast, openLetter, localLetterId }) {
   const [decryptedLetter, setDecryptedLetter] = useState(null)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -31,6 +31,7 @@ export default function CloudLetter({ cloudLetterId, setView, showToast }) {
         const payload = await decryptLetterPayload(letter, letter.unlockKey)
         if (!cancelled) {
           setDecryptedLetter(payload)
+          if (localLetterId) openLetter(localLetterId)
           showToast('Letter opened.')
         }
       } catch (loadError) {

@@ -94,7 +94,7 @@ export default function Settings({ dark, setDark, exportLetters, importLetters, 
       </Card>
 
       <p className="text-center text-xs text-[var(--text-muted)]">
-        algernon v2.0 · encrypted in transit and at rest
+        algernon v2.0 · No accounts · Encrypted letters · Private reminders
       </p>
     </main>
   )

@@ -159,7 +159,7 @@ export default function CloudLetter({ cloudLetterId, setView, showToast, openLet
           )}
         </div>
         <p className="text-center text-xs text-[var(--text-muted)]">
-          algernon · encrypted in transit and at rest
+          algernon
         </p>
       </Card>
     </main>

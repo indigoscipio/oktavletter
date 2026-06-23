@@ -1,13 +1,21 @@
+import Button from './ui/Button'
+
 export default function EmptyState({ title, children, icon, actionLabel, onAction }) {
   return (
-    <div className="rounded-xl border border-dashed border-black/15 p-6 text-center">
-      {icon ? <div className="mb-3 flex justify-center text-stone">{icon}</div> : null}
-      <h3 className="text-lg text-ink">{title}</h3>
-      {children ? <p className="mt-2 text-sm text-stone">{children}</p> : null}
+    <div className="rounded-xl border border-dashed border-[var(--border)] p-8 text-center">
+      {icon ? (
+        <div className="mb-3 flex justify-center text-[var(--text-muted)]">{icon}</div>
+      ) : null}
+      <h3 className="text-lg font-medium text-[var(--text-primary)]">{title}</h3>
+      {children ? (
+        <p className="mt-2 text-sm text-[var(--text-secondary)]">{children}</p>
+      ) : null}
       {actionLabel && onAction ? (
-        <button type="button" onClick={onAction} className="mt-4 rounded-full bg-amber px-4 py-2 text-sm text-ink">
-          {actionLabel}
-        </button>
+        <div className="mt-4">
+          <Button variant="primary" size="md" onClick={onAction}>
+            {actionLabel}
+          </Button>
+        </div>
       ) : null}
     </div>
   )

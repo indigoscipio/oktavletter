@@ -1,6 +1,13 @@
+import { useState } from 'react'
+import { ChevronDown, Download, Upload } from 'lucide-react'
 import { readJsonFile } from '../utils/export'
+import Toggle from '../components/ui/Toggle'
+import Button from '../components/ui/Button'
+import Card from '../components/ui/Card'
 
-export default function Settings({ exportLetters, importLetters, showToast }) {
+export default function Settings({ dark, setDark, exportLetters, importLetters, showToast }) {
+  const [showAdvanced, setShowAdvanced] = useState(false)
+
   async function handleImport(event) {
     const file = event.target.files?.[0]
     if (!file) return
@@ -17,36 +24,81 @@ export default function Settings({ exportLetters, importLetters, showToast }) {
   }
 
   return (
-    <main className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-3xl text-ink">Settings</h1>
-        <p className="text-stone">Algernon emails you when your letters are ready.</p>
+    <main className="space-y-6">
+      <header className="space-y-1">
+        <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Settings</h1>
+        <p className="text-sm text-[var(--text-secondary)]">
+          Change your user settings here.
+        </p>
       </header>
 
-      <section className="space-y-2 rounded-xl border border-black/10 bg-white p-4">
-        <h2 className="text-xl text-ink">About</h2>
-        <p className="text-sm leading-6 text-stone">
-          No accounts. Your letter is encrypted before upload. We send the link when it opens, but we never read your
-          content.
+      <Card className="space-y-2">
+        <h2 className="text-lg font-medium text-[var(--text-primary)]">About</h2>
+        <p className="text-sm leading-6 text-[var(--text-secondary)]">
+          No accounts. Your letter is encrypted before upload. We send the reminder, but we never
+          read your content.
         </p>
-      </section>
+      </Card>
 
-      <details className="rounded-xl border border-black/10 bg-white p-4">
-        <summary className="cursor-pointer text-xl text-ink">Advanced</summary>
-        <div className="mt-4 space-y-3">
-          <p className="text-sm text-stone">
-            Export or import the local browser copy. Older or local-only letters may include letter content, so keep
-            backups private.
-          </p>
-          <button type="button" onClick={exportLetters} className="rounded-full bg-amber px-4 py-2 text-sm text-ink">
-            Export local JSON
-          </button>
-          <label className="block text-sm text-stone">
-            Import local JSON
-            <input type="file" accept="application/json,.json" onChange={handleImport} className="mt-2 block w-full text-sm" />
-          </label>
-        </div>
-      </details>
+      <div>
+        <button
+          type="button"
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="flex w-full items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4 text-left"
+        >
+          <span className="text-lg font-medium text-[var(--text-primary)]">Advanced</span>
+          <ChevronDown
+            size={20}
+            className={`text-[var(--text-muted)] transition-transform duration-200 ${
+              showAdvanced ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+        {showAdvanced && (
+          <div className="mt-2 space-y-3 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4">
+            <p className="text-sm text-[var(--text-secondary)]">
+              Export or import the local browser copy. Older or local-only letters may include
+              letter content, so keep backups private.
+            </p>
+            <div className="flex gap-2">
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<Download size={14} />}
+                onClick={exportLetters}
+              >
+                Export
+              </Button>
+              <label className="inline-flex cursor-pointer">
+                <input
+                  type="file"
+                  accept="application/json,.json"
+                  onChange={handleImport}
+                  className="hidden"
+                />
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--bg-card)] px-3 py-1.5 text-sm font-medium text-[var(--text-primary)] transition-colors duration-150 hover:bg-[var(--bg-elevated)]">
+                  <Upload size={14} />
+                  Import
+                </span>
+              </label>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <Card className="space-y-2">
+        <h2 className="text-lg font-medium text-[var(--text-primary)]">Appearance</h2>
+        <Toggle
+          checked={dark}
+          onChange={setDark}
+          label="Dark Mode"
+          labelClassName="text-sm"
+        />
+      </Card>
+
+      <p className="text-center text-xs text-[var(--text-muted)]">
+        algernon v2.0 · fully private &amp; encrypted
+      </p>
     </main>
   )
 }

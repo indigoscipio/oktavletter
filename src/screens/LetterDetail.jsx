@@ -1,13 +1,17 @@
+import { ArrowLeft, Lock, Mail, Calendar } from 'lucide-react'
 import { formatDate, formatLongDate, getDaysUntil, getLetterState } from '../utils/dates'
+import Button from '../components/ui/Button'
+import Card from '../components/ui/Card'
+import Badge from '../components/ui/Badge'
 
 export default function LetterDetail({ letter, openLetter, deleteLetter, setView, showToast }) {
   if (!letter) {
     return (
       <main className="space-y-4">
-        <p className="text-stone">Letter not found.</p>
-        <button type="button" onClick={() => setView('letters')} className="text-amber">
+        <p className="text-[var(--text-secondary)]">Letter not found.</p>
+        <Button variant="ghost" onClick={() => setView('letters')}>
           Back to letters
-        </button>
+        </Button>
       </main>
     )
   }
@@ -17,12 +21,11 @@ export default function LetterDetail({ letter, openLetter, deleteLetter, setView
 
   function handleOpen() {
     openLetter(letter.id)
-    showToast('The seal is broken. Your letter is open.')
+    showToast('Letter opened.')
   }
 
   function handleDelete() {
     if (!window.confirm('Delete this letter? This cannot be undone.')) return
-
     deleteLetter(letter.id)
     setView('letters')
     showToast('Letter deleted.')
@@ -30,44 +33,75 @@ export default function LetterDetail({ letter, openLetter, deleteLetter, setView
 
   return (
     <main className="space-y-6">
-      <button type="button" onClick={() => setView('letters')} className="text-sm text-amber">
-        Back to letters
-      </button>
+      <Button
+        variant="ghost"
+        size="sm"
+        leftIcon={<ArrowLeft size={16} />}
+        onClick={() => setView('letters')}
+      >
+        Back to Letters
+      </Button>
 
       <header className="space-y-2">
-        <p className="text-sm uppercase tracking-[0.2em] text-stone">{state}</p>
-        <h1 className="text-3xl text-ink">{letter.title}</h1>
-        <p className="text-stone">Written {formatDate(letter.writtenAt)}</p>
+        <div className="flex items-center gap-2">
+          <Badge variant={state}>{state}</Badge>
+        </div>
+        <p className="text-sm text-[var(--text-muted)]">Written {formatDate(letter.writtenAt)}</p>
+        <h1 className="text-2xl font-semibold text-[var(--text-primary)]">{letter.title}</h1>
       </header>
 
-      {state === 'waiting' ? (
-        <section className="rounded-xl border border-black/10 bg-white p-6 text-center">
-          <p className="text-lg text-ink">This letter is sealed.</p>
-          <p className="mt-2 text-stone">
-            It opens on {formatLongDate(letter.openDate)}{days > 0 ? `, in ${days} days.` : '.'}
+      {state === 'waiting' && (
+        <Card className="space-y-3 text-center">
+          <div className="flex justify-center">
+            <div className="rounded-full bg-stone-200 p-3 dark:bg-stone-700">
+              <Lock size={24} className="text-[var(--text-secondary)]" />
+            </div>
+          </div>
+          <p className="text-lg font-medium text-[var(--text-primary)]">This letter is sealed.</p>
+          <p className="text-sm text-[var(--text-secondary)]">
+            It opens on {formatLongDate(letter.openDate)}
+            {days > 0 ? `, in ${days} days.` : '.'}
           </p>
-        </section>
-      ) : null}
+        </Card>
+      )}
 
-      {state === 'ready' ? (
-        <section className="rounded-xl border border-amber/40 bg-white p-6 text-center">
-          <p className="text-lg text-ink">This letter is ready.</p>
-          <p className="mt-2 text-stone">Break the seal when you are ready to read it.</p>
-          <button type="button" onClick={handleOpen} className="mt-5 rounded-full bg-amber px-5 py-3 text-ink">
-            Break the seal
-          </button>
-        </section>
-      ) : null}
+      {state === 'ready' && (
+        <Card className="space-y-4 text-center">
+          <div className="flex justify-center">
+            <div className="rounded-full bg-amber/15 p-3">
+              <Mail size={24} className="text-amber" />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <p className="text-lg font-medium text-[var(--text-primary)]">This letter is ready.</p>
+            <p className="text-sm text-[var(--text-secondary)]">
+              Break the seal when you are ready to read it.
+            </p>
+          </div>
+          <Button variant="primary" size="lg" onClick={handleOpen}>
+            Break the Seal
+          </Button>
+        </Card>
+      )}
 
-      {state === 'opened' ? (
-        <article className="whitespace-pre-wrap rounded-xl border border-black/10 bg-white p-5 leading-7 text-ink">
+      {state === 'opened' && (
+        <article className="whitespace-pre-wrap rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5 leading-7 text-[var(--text-primary)]">
           {letter.content}
         </article>
-      ) : null}
+      )}
 
-      <button type="button" onClick={handleDelete} className="text-sm text-stone underline">
-        Delete letter
-      </button>
+      {letter.emailReminder && (
+        <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+          <Mail size={14} />
+          <span>Reminder: {letter.emailReminder}</span>
+        </div>
+      )}
+
+      <div className="h-px bg-[var(--border)]" />
+
+      <Button variant="ghost" size="sm" className="text-destructive-500" onClick={handleDelete}>
+        Delete Letter
+      </Button>
     </main>
   )
 }

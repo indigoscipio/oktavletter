@@ -1,32 +1,43 @@
+import { ChevronRight, Lock, CheckCircle, Mail } from 'lucide-react'
 import { formatDate, formatLongDate, getDaysUntil, getLetterState } from '../utils/dates'
+import Badge from './ui/Badge'
 
 export default function LetterCard({ letter, onOpen }) {
   const state = getLetterState(letter)
   const days = getDaysUntil(letter.openDate)
 
-  const description = {
-    opened: `Opened ${formatDate(letter.openedAt)}`,
-    ready: 'Ready to open',
-    waiting: letter.emailReminder
-      ? `Email reminder set for ${formatLongDate(letter.openDate)}`
-      : days === 1
-        ? 'Opens tomorrow'
-        : `Opens in ${days} days`,
-  }[state]
-
   return (
     <button
       type="button"
       onClick={() => onOpen(letter.id)}
-      className="w-full rounded-xl border border-black/10 bg-white p-4 text-left"
+      className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4 text-left transition-all duration-150 hover:border-amber/40 hover:shadow-sm"
     >
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-lg text-ink">{letter.title}</h3>
-          <p className="mt-1 text-sm text-stone">{description}</p>
-          <p className="mt-1 text-xs text-stone">Open date: {formatDate(letter.openDate)}</p>
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-base font-medium text-[var(--text-primary)]">
+            {letter.title}
+          </h3>
+          <div className="mt-1.5 flex items-center gap-1.5 text-sm text-[var(--text-secondary)]">
+            {state === 'opened' && <CheckCircle size={14} className="shrink-0 text-amber" />}
+            {state === 'ready' && <Mail size={14} className="shrink-0 text-amber" />}
+            {state === 'waiting' && <Lock size={14} className="shrink-0 text-[var(--text-muted)]" />}
+            <span>
+              {state === 'opened' && `Opened ${formatDate(letter.openedAt)}`}
+              {state === 'ready' && 'Ready to open'}
+              {state === 'waiting' && (
+                letter.emailReminder
+                  ? `Opens ${formatLongDate(letter.openDate)}`
+                  : days === 1
+                    ? 'Opens tomorrow'
+                    : `Opens in ${days} days`
+              )}
+            </span>
+          </div>
         </div>
-        <span className="rounded-full border border-amber/40 px-2 py-1 text-xs text-amber">{state}</span>
+        <div className="flex items-center gap-2 shrink-0">
+          <Badge variant={state}>{state}</Badge>
+          <ChevronRight size={16} className="text-[var(--text-muted)]" />
+        </div>
       </div>
     </button>
   )

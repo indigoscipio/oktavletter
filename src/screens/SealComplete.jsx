@@ -1,37 +1,48 @@
-import { List } from 'lucide-react'
+import { CheckCircle, ArrowLeft } from 'lucide-react'
 import { formatLongDate } from '../utils/dates'
+import Button from '../components/ui/Button'
+import Card from '../components/ui/Card'
 
 export default function SealComplete({ letter, setView }) {
   if (!letter) {
     return (
       <main className="space-y-4">
-        <p className="text-stone">Letter not found.</p>
-        <button type="button" onClick={() => setView('letters')} className="text-amber">
-          Back to letters
-        </button>
+        <p className="text-[var(--text-secondary)]">Letter not found.</p>
+        <Button variant="ghost" onClick={() => setView('letters')}>
+        Back to Letters
+        </Button>
       </main>
     )
   }
 
   return (
     <main className="space-y-6">
-      <header className="space-y-3">
-        <p className="text-sm uppercase tracking-[0.2em] text-stone">Sealed</p>
-        <h1 className="text-3xl text-ink">Your letter is sealed.</h1>
-        <p className="text-stone">
-          We will email you on {formatLongDate(letter.openDate)}.
+      <Card className="space-y-4 text-center">
+        <div className="flex justify-center">
+          <div className="rounded-full bg-amber/15 p-3">
+            <CheckCircle size={24} className="text-amber" />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Sealed!</h1>
+          <p className="text-[var(--text-secondary)]">
+            We will email you on {formatLongDate(letter.openDate)}.
+          </p>
+        </div>
+        <p className="text-sm text-[var(--text-muted)]">
+          If you do not see the email that day, check spam or promotions.
         </p>
-        <p className="text-sm text-stone">If you do not see the email that day, check spam or promotions.</p>
-      </header>
+      </Card>
 
-      <button
-        type="button"
+      <Button
+        variant="primary"
+        size="lg"
+        className="w-full"
+        leftIcon={<ArrowLeft size={16} />}
         onClick={() => setView('letters')}
-        className="flex w-full items-center justify-center gap-2 rounded-full bg-amber px-4 py-3 text-ink"
       >
-        <List size={18} />
         Back to letters
-      </button>
+      </Button>
     </main>
   )
 }

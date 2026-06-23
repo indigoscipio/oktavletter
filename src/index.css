@@ -1,20 +1,76 @@
 @import "tailwindcss";
 
 @theme {
-  --color-midnight: #0d1117;
+  --color-brand-50: #fbf8eb;
+  --color-brand-100: #f5edda;
+  --color-brand-200: #e8dab3;
+  --color-brand-300: #daba80;
+  --color-brand-400: #d4a53a;
+  --color-brand-500: #c9922a;
+  --color-brand-600: #b58025;
+  --color-brand-700: #8e651c;
+
+  --color-midnight: #1a1f2e;
   --color-ink: #1a1f2e;
-  --color-cream: #f2ede4;
-  --color-stone: #8b8fa8;
+  --color-cream: #fbf8eb;
   --color-amber: #c9922a;
+  --color-stone: #8b8fa8;
+
+  --color-stone-100: #f5f5f4;
+  --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1;
+  --color-stone-400: #a8a29e;
+  --color-stone-500: #78716c;
+  --color-stone-600: #57534e;
+  --color-stone-700: #44403c;
+  --color-stone-800: #292524;
+  --color-stone-900: #1c1917;
+
+  --color-destructive-500: #ef4444;
+  --color-destructive-600: #dc2626;
+
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 9999px;
+}
+
+:root {
+  --bg: var(--color-cream);
+  --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --text-primary: var(--color-ink);
+  --text-secondary: var(--color-stone);
+  --text-muted: var(--color-stone-400);
+  --border: rgba(26, 31, 46, 0.1);
+  --border-focus: var(--color-amber);
+}
+
+:root.dark {
+  --bg: #111318;
+  --bg-card: #1a1d25;
+  --bg-elevated: #22252e;
+  --text-primary: #f5f5f4;
+  --text-secondary: #a8a29e;
+  --text-muted: #78716c;
+  --border: rgba(245, 245, 244, 0.1);
+  --border-focus: var(--color-amber);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #f2ede4;
-  color: #1a1f2e;
-  font-family: Georgia, 'Times New Roman', serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 button,
@@ -26,4 +82,25 @@ select {
 
 button {
   cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

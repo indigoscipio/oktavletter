@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import Header from './components/Header'
 import Navigation from './components/Navigation'
 import Toast from './components/Toast'
+import { useDarkMode } from './hooks/useDarkMode'
 import { useLetters } from './hooks/useLetters'
 import { useToast } from './hooks/useToast'
 import CloudLetter from './screens/CloudLetter'
@@ -15,8 +17,11 @@ export default function App() {
   const [view, setView] = useState(initialCloudLetterId ? 'cloud' : 'letters')
   const [cloudLetterId, setCloudLetterId] = useState(initialCloudLetterId)
   const [selectedLetterId, setSelectedLetterId] = useState(null)
+  const [dark, setDark] = useDarkMode()
   const letters = useLetters()
   const { toast, showToast } = useToast()
+
+  const showHeader = view !== 'cloud'
 
   function renderView() {
     if (view === 'write') {
@@ -31,7 +36,15 @@ export default function App() {
     }
 
     if (view === 'settings') {
-      return <Settings exportLetters={letters.exportLetters} importLetters={letters.importLetters} showToast={showToast} />
+      return (
+        <Settings
+          dark={dark}
+          setDark={setDark}
+          exportLetters={letters.exportLetters}
+          importLetters={letters.importLetters}
+          showToast={showToast}
+        />
+      )
     }
 
     if (view === 'sealed') {
@@ -74,8 +87,11 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen pb-28">
-      <div className="mx-auto max-w-xl px-4 py-8">{renderView()}</div>
+    <div className="min-h-screen pb-24">
+      <div className="mx-auto max-w-xl px-4 py-6">
+        {showHeader && <Header setView={setView} />}
+        {renderView()}
+      </div>
       <Navigation view={view} setView={setView} />
       <Toast message={toast} />
     </div>

@@ -10,7 +10,7 @@ export async function createCloudLetter(payload) {
 
     return readResponse(response)
   } catch {
-    throw new Error('Could not reach Algernon email delivery. Check the API setup and try again.')
+    throw new Error('Could not reach algernon. Check your connection and try again.')
   }
 }
 
@@ -19,14 +19,14 @@ export async function getCloudLetter(id) {
     const response = await fetch(`${API_BASE}/api/letters/${encodeURIComponent(id)}`)
     return readResponse(response)
   } catch {
-    throw new Error('Could not reach Algernon email delivery. Try again later.')
+    throw new Error('Could not reach algernon. Try again later.')
   }
 }
 
 async function readResponse(response) {
   const data = await response.json().catch(() => ({}))
   if (!response.ok) {
-    throw new Error(data.error || 'Request failed.')
+    throw new Error(data.error || 'Something went wrong. Try again.')
   }
   return data
 }

@@ -19,7 +19,7 @@ export default function Input({
           </span>
         ) : null}
         <input
-          className={`w-full rounded-xl border bg-[var(--bg-card)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors duration-150 placeholder:text-[var(--text-muted)] focus:border-[var(--border-focus)] ${
+          className={`w-full rounded-xl border bg-[var(--bg-card)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors duration-150 placeholder:text-[var(--text-muted)] focus:border-[var(--border-focus)] focus:ring-2 focus:ring-amber/30 ${
             leftIcon ? 'pl-10' : ''
           } ${rightIcon ? 'pr-10' : ''} ${
             error ? 'border-destructive-500' : 'border-[var(--border)]'

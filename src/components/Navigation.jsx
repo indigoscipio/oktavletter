@@ -27,7 +27,7 @@ export default function Navigation({ view, setView }) {
               {active && (
                 <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-amber" />
               )}
-              <Icon size={20} />
+              <Icon size={20} aria-hidden="true" />
               {item.label}
             </button>
           )

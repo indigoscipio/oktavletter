@@ -10,7 +10,7 @@ export default function LetterDetail({ letter, openLetter, deleteLetter, setView
       <main className="space-y-4">
         <p className="text-[var(--text-secondary)]">Letter not found.</p>
         <Button variant="ghost" onClick={() => setView('letters')}>
-          Back to letters
+          Back to Letters
         </Button>
       </main>
     )
@@ -85,9 +85,9 @@ export default function LetterDetail({ letter, openLetter, deleteLetter, setView
       )}
 
       {state === 'opened' && (
-        <article className="whitespace-pre-wrap rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5 leading-7 text-[var(--text-primary)]">
+        <Card className="whitespace-pre-wrap leading-7 text-[var(--text-primary)]">
           {letter.content}
-        </article>
+        </Card>
       )}
 
       {letter.emailReminder && (

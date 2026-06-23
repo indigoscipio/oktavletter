@@ -4,7 +4,7 @@ import LetterCard from '../components/LetterCard'
 import Button from '../components/ui/Button'
 import { getLetterState } from '../utils/dates'
 
-function Section({ title, letters, onOpen, empty }) {
+function Section({ title, letters, onOpen }) {
   if (letters.length === 0) return null
   return (
     <section className="space-y-3">
@@ -45,14 +45,6 @@ export default function Letters({ letters, setView, setSelectedLetterId, setClou
             What do you want to say to your future?
           </h1>
         </div>
-        <Button
-          variant="primary"
-          size="lg"
-          className="w-full"
-          onClick={() => setView('write')}
-        >
-          Write Future Letter
-        </Button>
         <EmptyState
           title="No letters yet"
           icon={<PenLine size={32} />}

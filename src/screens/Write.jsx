@@ -170,7 +170,7 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
   }
 
   return (
-    <main className="space-y-4">
+    <main className="space-y-6">
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Write Letter</h1>
         <p className="text-sm text-[var(--text-secondary)]">
@@ -194,10 +194,10 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
             onChange={(e) => setContent(e.target.value)}
             rows={12}
             placeholder="Write honestly. No one else needs to read this."
-            className="w-full resize-y rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors duration-150 placeholder:text-[var(--text-muted)] focus:border-[var(--border-focus)]"
+            className="w-full resize-y rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors duration-150 placeholder:text-[var(--text-muted)] focus:border-[var(--border-focus)] focus:ring-2 focus:ring-amber/30"
           />
           <span className="block text-right text-xs text-[var(--text-muted)]">
-            {content.length}/300
+            {content.length} characters
           </span>
         </label>
 

@@ -41,7 +41,7 @@ export default function SealComplete({ letter, setView }) {
         leftIcon={<ArrowLeft size={16} />}
         onClick={() => setView('letters')}
       >
-        Back to letters
+        Back to Letters
       </Button>
     </main>
   )

@@ -15,7 +15,8 @@ export default function Settings({ dark, setDark, exportLetters, importLetters, 
     try {
       const json = await readJsonFile(file)
       const result = importLetters(json)
-      showToast(`Import complete. Added ${result.added}, updated ${result.updated}, skipped ${result.skipped}.`)
+      const total = result.added + result.updated
+      showToast(`Imported successfully. ${total} letter${total === 1 ? '' : 's'} added or updated.`)
     } catch (error) {
       showToast(error.message)
     } finally {
@@ -27,9 +28,6 @@ export default function Settings({ dark, setDark, exportLetters, importLetters, 
     <main className="space-y-6">
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Settings</h1>
-        <p className="text-sm text-[var(--text-secondary)]">
-          Change your user settings here.
-        </p>
       </header>
 
       <Card className="space-y-2">
@@ -57,8 +55,8 @@ export default function Settings({ dark, setDark, exportLetters, importLetters, 
         {showAdvanced && (
           <div className="mt-2 space-y-3 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4">
             <p className="text-sm text-[var(--text-secondary)]">
-              Export or import the local browser copy. Older or local-only letters may include
-              letter content, so keep backups private.
+              Export or import your letters as a JSON file. Backups contain your letter
+              content, so store them securely.
             </p>
             <div className="flex gap-2">
               <Button
@@ -76,8 +74,8 @@ export default function Settings({ dark, setDark, exportLetters, importLetters, 
                   onChange={handleImport}
                   className="hidden"
                 />
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--bg-card)] px-3 py-1.5 text-sm font-medium text-[var(--text-primary)] transition-colors duration-150 hover:bg-[var(--bg-elevated)]">
-                  <Upload size={14} />
+                <span className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--border)] px-3 py-1.5 text-sm font-medium text-[var(--text-primary)] transition-colors duration-150 hover:bg-[var(--bg-elevated)]">
+                  <Upload size={16} />
                   Import
                 </span>
               </label>

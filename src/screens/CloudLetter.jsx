@@ -29,7 +29,7 @@ export default function CloudLetter({ cloudLetterId, setView, showToast, openLet
         }
 
         if (!letter.unlockKey) {
-          throw new Error('This letter was created with an older version of Algernon and cannot be opened here.')
+          throw new Error('This letter was created with an older version of algernon and cannot be opened here.')
         }
 
         const payload = await decryptLetterPayload(letter, letter.unlockKey)

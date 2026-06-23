@@ -9,7 +9,7 @@ export default function SealComplete({ letter, setView }) {
       <main className="space-y-4">
         <p className="text-[var(--text-secondary)]">Letter not found.</p>
         <Button variant="ghost" onClick={() => setView('letters')}>
-        Back to Letters
+          Back to Letters
         </Button>
       </main>
     )

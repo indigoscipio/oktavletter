@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://algernon.oktavsoftware.com/sitemap.xml

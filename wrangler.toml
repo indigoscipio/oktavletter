@@ -6,7 +6,7 @@ compatibility_date = "2026-06-19"
 crons = ["0 * * * *"]
 
 [vars]
-APP_URL = "https://oktavletter.pages.dev/app/"
+APP_URL = "https://algernon.oktavsoftware.com/app/"
 FROM_EMAIL = "Algernon <letters@oktavsoftware.com>"
 ALLOWED_ORIGINS = "https://oktavletter.pages.dev,https://algernon.oktavsoftware.com,http://localhost:5173,http://127.0.0.1:5173"
 

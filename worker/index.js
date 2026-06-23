@@ -21,7 +21,8 @@ export default {
 
       return withCors(json({ error: 'Not found' }, 404), request, env)
     } catch (error) {
-      return withCors(json({ error: error.message || 'Server error' }, 500), request, env)
+      console.error('Unhandled error:', error)
+      return withCors(json({ error: 'Server error' }, 500), request, env)
     }
   },
 
@@ -31,6 +32,9 @@ export default {
 }
 
 async function createLetter(request, env, ctx) {
+  const contentLength = Number(request.headers.get('content-length') || 0)
+  if (contentLength > 50_000) return json({ error: 'Request too large.' }, 413)
+
   const body = await request.json()
   const email = String(body.email || '').trim().toLowerCase()
   const openDate = String(body.openDate || '')
@@ -39,7 +43,7 @@ async function createLetter(request, env, ctx) {
   const iv = String(body.iv || '')
   const unlockKey = String(body.unlockKey || '')
 
-  if (!email.includes('@')) return json({ error: 'Enter a valid email.' }, 400)
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'Enter a valid email.' }, 400)
   if (!isFutureDate(openDate)) return json({ error: 'Choose a future open date.' }, 400)
   if (!encryptedPayload || !salt || !iv) return json({ error: 'Missing encrypted letter data.' }, 400)
   if (!unlockKey) return json({ error: 'Missing unlock key.' }, 400)
@@ -244,7 +248,7 @@ function corsHeaders(request, env) {
     .split(',')
     .map((value) => value.trim())
     .filter(Boolean)
-  const allowedOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0] || '*'
+  const allowedOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0] || ''
 
   return {
     'access-control-allow-origin': allowedOrigin,

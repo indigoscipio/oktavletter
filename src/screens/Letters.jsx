@@ -51,7 +51,7 @@ export default function Letters({ letters, setView, setSelectedLetterId, setClou
           actionLabel="Write your first letter"
           onAction={() => setView('write')}
         >
-          Your letter is encrypted before upload. We never read your content.
+          Your letter is encrypted before upload. Only your unique link can open it.
         </EmptyState>
       </main>
     )

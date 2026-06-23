@@ -33,8 +33,7 @@ export default function Settings({ dark, setDark, exportLetters, importLetters, 
       <Card className="space-y-2">
         <h2 className="text-lg font-medium text-[var(--text-primary)]">About</h2>
         <p className="text-sm leading-6 text-[var(--text-secondary)]">
-          No accounts. Your letter is encrypted before upload. We send the reminder, but we never
-          read your content.
+          No accounts. Your letter is encrypted before upload. Only your unique link can open it.
         </p>
       </Card>
 
@@ -95,7 +94,7 @@ export default function Settings({ dark, setDark, exportLetters, importLetters, 
       </Card>
 
       <p className="text-center text-xs text-[var(--text-muted)]">
-        algernon v2.0 · fully private &amp; encrypted
+        algernon v2.0 · encrypted in transit and at rest
       </p>
     </main>
   )

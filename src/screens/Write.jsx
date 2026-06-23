@@ -141,7 +141,7 @@ export default function Write({ createLetter, setView, setSelectedLetterId, show
             ) : null}
           </div>
           <p className="text-center text-xs text-[var(--text-muted)]">
-            algernon
+            algernon · No accounts · Encrypted letters · Private reminders
           </p>
         </Card>
 

@@ -159,7 +159,7 @@ export default function CloudLetter({ cloudLetterId, setView, showToast, openLet
           )}
         </div>
         <p className="text-center text-xs text-[var(--text-muted)]">
-          algernon
+          algernon · No accounts · Encrypted letters · Private reminders
         </p>
       </Card>
     </main>
